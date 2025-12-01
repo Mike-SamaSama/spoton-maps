@@ -63,6 +63,21 @@ jobs:
           git --no-pager config --list || true
           git remote -v || true
 
+      - name: Debug: list workflows directory
+        run: |
+          echo "== .github/workflows contents =="
+          ls -la .github/workflows || true
+
+      - name: Debug: print selected environment variables
+        run: |
+          echo "== Selected environment vars =="
+          # Print a minimal, safe subset to avoid leaking secrets
+          echo "GITHUB_REPOSITORY=${GITHUB_REPOSITORY:-}" || true
+          echo "GITHUB_REF=${GITHUB_REF:-}" || true
+          echo "GITHUB_SHA=${GITHUB_SHA:-}" || true
+          echo "RUNNER_OS=${RUNNER_OS:-}" || true
+          echo "RUNNER_TEMP=${RUNNER_TEMP:-}" || true
+
       - name: Run generation tasks
         run: |
           echo "Running docs generator"
