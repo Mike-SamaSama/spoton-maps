@@ -9,6 +9,11 @@ on:
     - cron: '0 * * * *' # hourly
   workflow_dispatch: {}
 
+defaults:
+  run:
+    # use a login bash shell so PATH and profile are available for install/build steps
+    shell: bash -l {0}
+
 jobs:
   autogen:
     runs-on: ubuntu-latest
