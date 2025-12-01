@@ -41,11 +41,10 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Run generation tasks (placeholder)
+      - name: Run generation tasks
         run: |
-          # Add generation commands here. Example:
-          # npm run generate-docs || true
-          echo "No generation tasks configured."
+          echo "Running docs generator"
+          npm run generate-docs
 
       - name: Commit changes
         run: |
