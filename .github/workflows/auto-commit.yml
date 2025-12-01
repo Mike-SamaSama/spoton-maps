@@ -43,10 +43,37 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Debug: system & tool versions
+        run: |
+          echo "== Node & NPM versions =="
+          node -v || true
+          npm -v || true
+          echo "== Yarn version (if present) =="
+          yarn -v || true
+
+      - name: Debug: repo listing before generation
+        run: |
+          echo "== Working directory =="
+          pwd
+          echo "== Repo root listing (top 200 lines) =="
+          ls -la | sed -n '1,200p' || true
+          echo "== Disk usage (top-level) =="
+          du -sh . || true
+          echo "== Git config & remotes =="
+          git --no-pager config --list || true
+          git remote -v || true
+
       - name: Run generation tasks
         run: |
           echo "Running docs generator"
           npm run generate-docs
+
+      - name: Debug: git status after generation
+        run: |
+          echo "== Git status (porcelain) =="
+          git status --porcelain || true
+          echo "== Git diff (name-only) =="
+          git diff --name-only || true
 
       - name: Commit changes
         run: |
@@ -59,6 +86,14 @@ jobs:
             echo "No changes to commit"
             exit 0
           fi
+
+      - name: Debug: show last commit and changed files
+        if: always()
+        run: |
+          echo "== Last commit =="
+          git --no-pager log -1 || true
+          echo "== Changed files in last commit =="
+          git --no-pager show --name-only --pretty="" HEAD || true
 
       - name: Create or update Pull Request (autogen)
         uses: peter-evans/create-pull-request@v5
