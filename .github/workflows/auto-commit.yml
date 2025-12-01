@@ -1,5 +1,9 @@
 name: 'Auto-generate and Open PR'
 
+permissions:
+  contents: write
+  pull-requests: write
+
 on:
   schedule:
     - cron: '0 * * * *' # hourly
@@ -13,6 +17,16 @@ jobs:
         uses: actions/checkout@v4
         with:
           persist-credentials: true
+          fetch-depth: 0
+
+      - name: Debug: repo state
+        run: |
+          echo "== Git status =="
+          git status --porcelain || true
+          echo "== Current branch =="
+          git rev-parse --abbrev-ref HEAD || true
+          echo "== Git log (last 5) =="
+          git --no-pager log --oneline -5 || true
 
       - name: Setup Node
         uses: actions/setup-node@v4
