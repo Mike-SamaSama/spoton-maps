@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>OAuth Callback</title>
+</head>
+<body>
+  <% if (success) { %>
+    <h1>✅ Authorization Successful</h1>
+    <p>Your Google account has been authorized.</p>
+    <p><strong>Token ID:</strong> <code><%= tokenId %></code></p>
+    <p>Save this Token ID to use with the API.</p>
+    <p><a href="/">Back to home</a></p>
+  <% } else { %>
+    <h1>❌ Authorization Failed</h1>
+    <p><strong>Error:</strong> <%= error %></p>
+    <p><a href="/">Try again</a></p>
+  <% } %>
+</body>
+</html>

@@ -1,0 +1,98 @@
+// This is a sample Prisma schema for the Spot On Maps SaaS
+// It defines the data models for multi-tenant token storage and competitor monitoring
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Tenant {
+  id        String   @id @default(cuid())
+  name      String
+  contact   String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  tokens      Token[]
+  locations   Location[]
+  competitors Competitor[]
+
+  @@map("tenants")
+}
+
+model Token {
+  id              String   @id @default(cuid())
+  tenantId        String
+  tenant          Tenant   @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  
+  encrypted       String   // AES-256-GCM encrypted token data
+  needsReauth     Boolean  @default(false)
+  
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@index([tenantId])
+  @@map("tokens")
+}
+
+model Location {
+  id              String   @id @default(cuid())
+  tenantId        String
+  tenant          Tenant   @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  
+  googleLocationId String? // Google Business Profile location ID
+  data            Json?    // Location metadata from GBP API
+  verified        Boolean  @default(false)
+  
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  competitors     Competitor[]
+  snapshots       Snapshot[]
+
+  @@index([tenantId])
+  @@index([googleLocationId])
+  @@map("locations")
+}
+
+model Competitor {
+  id              String   @id @default(cuid())
+  locationId      String
+  location        Location @relation(fields: [locationId], references: [id], onDelete: Cascade)
+  
+  tenantId        String
+  tenant          Tenant   @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  
+  name            String
+  placeId         String?  // Google Places ID
+  data            Json?    // Competitor metadata from Places API
+  
+  firstSeen       DateTime @default(now())
+  lastSeen        DateTime @updatedAt
+
+  snapshots       Snapshot[]
+
+  @@index([locationId])
+  @@index([tenantId])
+  @@map("competitors")
+}
+
+model Snapshot {
+  id              String   @id @default(cuid())
+  competitorId    String
+  competitor      Competitor @relation(fields: [competitorId], references: [id], onDelete: Cascade)
+  
+  locationId      String
+  location        Location @relation(fields: [locationId], references: [id], onDelete: Cascade)
+  
+  snapshot        Json     // Full snapshot of competitor data at time of capture
+  capturedAt      DateTime @default(now())
+
+  @@index([competitorId])
+  @@index([locationId])
+  @@map("snapshots")
+}
