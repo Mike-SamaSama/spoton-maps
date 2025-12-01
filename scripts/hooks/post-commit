@@ -1,0 +1,17 @@
+#!/bin/sh
+# Tracked hook template to push after commits. Install this to .git/hooks/post-commit using the installer script.
+# NOTE: This runs in Git's shell environment. For Windows, use Git Bash or ensure sh is available.
+
+set -e
+
+# Push current branch to origin
+branch=$(git rev-parse --abbrev-ref HEAD)
+if [ "$branch" = "HEAD" ]; then
+  # Detached HEAD, skip
+  exit 0
+fi
+
+# Attempt to push; ignore failure to avoid blocking commit
+git push origin "$branch" || true
+
+exit 0

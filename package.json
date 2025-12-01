@@ -11,7 +11,9 @@
     "competitor": "node workers/competitor-scan-worker.js",
     "migrate": "node scripts/migrate-prisma.js",
     "seed": "npx prisma db seed",
-    "studio": "npx prisma studio"
+    "studio": "npx prisma studio",
+    "autopush": "node scripts/auto-push.js",
+    "install-hooks": "powershell -ExecutionPolicy Bypass -File ./scripts/install-hooks.ps1"
   },
   "keywords": [
     "google-maps",
@@ -28,6 +30,7 @@
     "dotenv": "^16.3.1",
     "node-fetch": "^2.7.0",
     "uuid": "^9.0.0",
+    "chokidar": "^3.5.3",
     "node-cron": "^3.0.2",
     "pg": "^8.11.2"
   },
