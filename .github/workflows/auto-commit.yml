@@ -58,7 +58,7 @@ jobs:
         uses: peter-evans/create-pull-request@v5
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          commit-message: chore(autogen): generated content by GitHub Actions
+          commit-message: "chore(autogen): generated content by GitHub Actions"
           branch: autogen
           title: "chore: autogen updates"
           body: "This PR was created by the auto-generation workflow. Review and merge if appropriate."
