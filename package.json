@@ -15,6 +15,7 @@
     "autopush": "node scripts/auto-push.js",
     "install-hooks": "powershell -ExecutionPolicy Bypass -File ./scripts/install-hooks.ps1"
   },
+  "generate-docs": "node scripts/generate-docs.js",
   "keywords": [
     "google-maps",
     "business-registration",
