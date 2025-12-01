@@ -1,4 +1,5 @@
 # Spot On Maps - SaaS for Google Maps Business Management
+<!-- GENERATED_AT:2025-12-01T12:45:20.684Z -->
 
 A production-ready SaaS backend for helping businesses register on Google Maps, monitor verification status, and track competitor activity.
 
